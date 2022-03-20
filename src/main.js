@@ -2,12 +2,8 @@
 const Router = require("koa-router")
 const {APP_PORT} = require("./config/config.default")
 const app = require("./app") 
-const router = new Router();
-
-router.get('/', (ctx, next) => {
-  // ctx.router available
-  ctx.body = "jiekou"
-});
+// const router = new Router();
+const router = require("./router/user.router")
 
 app
   .use(router.routes())
