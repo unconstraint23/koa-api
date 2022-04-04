@@ -1,5 +1,8 @@
+const { User } = require("../model")
+
 class UserService {
-    async createUser(user_name, password) {
+    async createUser(userInfo) {
+
         // 写入数据库
         return "写入数据库成功"
     }
