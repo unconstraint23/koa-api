@@ -1,12 +1,10 @@
 const fs = require("fs")
-const Router = require("koa-router")
+
 const {APP_PORT} = require("./config/config.default")
 const morgan = require('koa-morgan')
 const path = require("path")
 const app = require("./app") 
-const {errorHandler} = require("./app/error.handler")
-// const router = new Router();
-const router = require("./router/user.router")
+
 require("./model")
 // morgan 处理日志
 const ENV = 'dev' 
@@ -20,10 +18,8 @@ if (ENV === 'dev') {
   }))
 }
 
-app
-  .use(router.routes())
-  .use(router.allowedMethods());
-app.on("error",errorHandler)
+
+
 
   app.listen(APP_PORT,() => {
     console.log(`server is start on http://localhost:${APP_PORT}`)

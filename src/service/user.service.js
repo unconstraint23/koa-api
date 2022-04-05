@@ -1,4 +1,4 @@
-const { User } = require("../model")
+
 const connection = require("../model")
 class UserService {
     async createUser(userInfo) {

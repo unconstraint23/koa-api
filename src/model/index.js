@@ -6,7 +6,8 @@ const connection = mysql.createPool({
   port: config.MYSQL_PORT,
   database: config.MYSQL_DATABASE,
   user: config.MYSQL_USER,
-  password: config.MYSQL_PWD
+  password: config.MYSQL_PWD,
+  charset: "utf8mb4"
 })
 
 connection.getConnection((err,con) => {
