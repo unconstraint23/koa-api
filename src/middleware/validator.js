@@ -70,7 +70,7 @@ const checkToken = async (ctx,next) => {
    const res = await jwt.verify(token,PUBLIC_KEY,{
       algorithms: ["RS256"]
   }) 
-  console.log(res);
+  
   ctx.user = res
   await next()
   } catch (error) {

@@ -26,6 +26,10 @@ const errorHandler = (error, ctx) => {
             status = 401
             message = "未授权或凭证已过期";
             break
+            case errorType.FORBIDDEN_UPDATE: 
+            status = 403
+            message = "你没有权限！！";
+            break
         default: 
             status = 404;
             message = "Not Found"

@@ -1,5 +1,5 @@
 
-const { createMonment,getUserMoment } = require("../service/monment.service")
+const { createMonment,getUserMoment,updateUserMonent } = require("../service/monment.service")
 
 class MomentCroller {
     async create(ctx,next) {
@@ -20,14 +20,26 @@ class MomentCroller {
      * 
      */
     async getDetail(ctx,next) {
-        const {id} = ctx.params
+      
+        let req = ctx.request.body
+       console.log(req);
         try {
-            const res = await getUserMoment(Number(id))
+            const res = await getUserMoment(req)
            ctx.body = res 
         } catch (error) {
             
         }
         
+    }
+    async updateMoment(ctx, next) {
+        let req = ctx.request.body;
+        
+        try {
+            const res = await updateUserMonent(req)
+            ctx.body = res;
+        } catch (error) {
+            
+        }
     }
 }
 
