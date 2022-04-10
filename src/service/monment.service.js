@@ -43,7 +43,8 @@ class MonmentService {
 
     }
   }
-  async updateUserMonent({content,momentId}) {
+  async updateUserMonent(req) {
+    const {content,momentId} = req
     const state = `
     UPDATE moment SET content = ? WHERE id = ?;
         `

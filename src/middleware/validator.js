@@ -37,7 +37,7 @@ const loginValidate = async (ctx,next) => {
   try {
     const res = await getUserByUserName(userInfo)
     const user = res[0]
-    console.log(user);
+   
     if(!user) {
       const error = new Error(USER_NOT_EXISTS);
       return ctx.app.emit("error",error,ctx)
@@ -62,17 +62,17 @@ const checkPwd = (pwd1,pwd2) => {
 }
 
 const checkToken = async (ctx,next) => {
-
   const authorization = ctx.headers.authorization
-
+  
+ 
   const token = authorization.replace("Bearer ","")
   try {
    const res = await jwt.verify(token,PUBLIC_KEY,{
       algorithms: ["RS256"]
   }) 
-  
   ctx.user = res
   await next()
+  
   } catch (error) {
     const err = new Error(UNAUTHORIZATION)
     ctx.app.emit("error",err,ctx)

@@ -1,12 +1,14 @@
-const { userAndMonentId } = require("../service/auth.service")
+const { checkResource } = require("../service/auth.service")
 const { FORBIDDEN_UPDATE } = require("../constants/error.type")
 
 const checkUserPermission = async (ctx,next) => {
     const userId = ctx.user.id;
-    const {momentId} = ctx.request.body
+    let [resourceKey] = Object.keys(ctx.params)
+    const resourceId = ctx.params[resourceKey]
+    const tableName = resourceKey.replace("Id","")
     try {
-        const res = await userAndMonentId(userId,momentId)
-        console.log(res);
+        const res = await checkResource(tableName,userId,resourceId)
+        
         if(!res.length) {
             const error = new Error(FORBIDDEN_UPDATE);
             return ctx.app.emit("error",error,ctx)

@@ -22,7 +22,7 @@ class MomentCroller {
     async getDetail(ctx,next) {
       
         let req = ctx.request.body
-       console.log(req);
+       
         try {
             const res = await getUserMoment(req)
            ctx.body = res 
@@ -33,7 +33,8 @@ class MomentCroller {
     }
     async updateMoment(ctx, next) {
         let req = ctx.request.body;
-        
+        let {momentId} = ctx.params
+        req.momentId = Number(momentId)
         try {
             const res = await updateUserMonent(req)
             ctx.body = res;

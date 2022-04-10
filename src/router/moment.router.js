@@ -9,6 +9,6 @@ router.post("/create",checkToken,create)
 
 router.post("/detail",getDetail)
 
-router.patch("/update",checkToken,checkUserPermission,updateMoment)
+router.patch("/:momentId/update",checkToken,updateMoment)
 
 module.exports = router
