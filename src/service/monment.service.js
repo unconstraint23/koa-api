@@ -9,8 +9,9 @@ SELECT m.user_id,m.content,m.createAt createTime,m.updateAt updateTime,
 	JSON_OBJECT("id",c.id,"content",c.content,"commentId",c.comment_id,"createTime",c.createAt,"user",
 	JSON_OBJECT("id",u2.id,"name",u2.username,"avatar",u2.avatar_url)) 
 	
- ),NULL) FROM comment c LEFT JOIN user u2 ON c.user_id = u2.id WHERE m.id = c.moment_id) comments
- 
+ ),NULL) FROM comment c LEFT JOIN user u2 ON c.user_id = u2.id WHERE m.id = c.moment_id) comments,
+ (SELECT JSON_ARRAYAGG(CONCAT("http://localhost:3555/moment/images/",file.filename)) FROM file 
+ WHERE m.id = file.moment_id) images
 FROM moment m
  LEFT JOIN user u ON m.user_id = u.id 
 

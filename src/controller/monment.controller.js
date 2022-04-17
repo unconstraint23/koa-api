@@ -68,10 +68,18 @@ class MomentCroller {
         
     }
     async getPictureInfo(ctx,next) {
-        const { filename } = ctx.params;
+        let { filename } = ctx.params;
+        
         try {
-            const res = await getPictureByFilename(filename)
+            const {type} = ctx.query;
             
+            
+            const res = await getPictureByFilename(filename)
+            console.log(res)
+            const types = ["small","mid","large"]
+            if(types.some(item => item == type)) {
+                filename += `-${type}`
+            }
             
             ctx.set("content-type",res.mimeType)
             ctx.body = fs.createReadStream(`${PICTURE_PATH}/${filename}`)

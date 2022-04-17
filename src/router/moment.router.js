@@ -3,6 +3,7 @@ const {create, getDetail,updateMoment,addLabels,getPictureInfo} = require("../co
 const { checkToken } = require("../middleware/validator")
 const { checkUserPermission } = require("../middleware/auth.middleware");
 const { verifyLabelExists } = require("../middleware/label.middleware");
+const { pictureJimpSize } = require("../middleware/file.middleware");
 
 const router = new Router({prefix: "/moment"});
 
