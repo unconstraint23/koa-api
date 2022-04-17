@@ -19,5 +19,17 @@ class UserService {
         }
         
     }
+    async updateUserAvatar(url,id) {
+        const state = `
+        UPDATE user SET avatar_url = ? WHERE id = ?;
+        `
+        try {
+            const [res] = await connection.execute(state,[url,id])
+            console.log(res);
+            return res
+        } catch (error) {
+            
+        }
+    }
 }
 module.exports = new UserService()

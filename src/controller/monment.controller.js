@@ -1,5 +1,8 @@
-
-const { createMonment,getUserMoment,updateUserMonent } = require("../service/monment.service")
+const fs = require("fs")
+const { PICTURE_PATH } = require("../constants/file.type")
+const { getPictureByFilename } = require("../service/file.service")
+const { labelIsAdd } = require("../service/label.service")
+const { createMonment,getUserMoment,updateUserMonent,momentAddLabel } = require("../service/monment.service")
 
 class MomentCroller {
     async create(ctx,next) {
@@ -38,6 +41,40 @@ class MomentCroller {
         try {
             const res = await updateUserMonent(req)
             ctx.body = res;
+        } catch (error) {
+            
+        }
+    }
+    async addLabels(ctx, next) {
+        const { labels } = ctx;
+        const {momentId} = ctx.params
+        console.log(momentId)
+        try {
+           for (const label of labels) {
+            const labelId = +label.id
+            const res = await labelIsAdd(Number(momentId),labelId)
+            
+            if(!res) {
+                await momentAddLabel(Number(momentId),labelId)
+            }
+        }
+        ctx.body = {
+            status: "success",
+            message: "标签添加成功"
+        } 
+        } catch (error) {
+            
+        }
+        
+    }
+    async getPictureInfo(ctx,next) {
+        const { filename } = ctx.params;
+        try {
+            const res = await getPictureByFilename(filename)
+            
+            
+            ctx.set("content-type",res.mimeType)
+            ctx.body = fs.createReadStream(`${PICTURE_PATH}/${filename}`)
         } catch (error) {
             
         }

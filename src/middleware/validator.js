@@ -62,6 +62,7 @@ const checkPwd = (pwd1,pwd2) => {
 }
 
 const checkToken = async (ctx,next) => {
+  console.log("Jinlaile");
   const authorization = ctx.headers.authorization
   
  

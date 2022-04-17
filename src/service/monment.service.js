@@ -1,7 +1,21 @@
 const connection = require("../model")
 const userMomentFrag = `
-SELECT user_id,content,moment.createAt createTime,moment.updateAt updateTime, 
-JSON_OBJECT("authId",user.id,"username",user.username) auth FROM moment LEFT JOIN user ON moment.user_id = user.id 
+SELECT m.user_id,m.content,m.createAt createTime,m.updateAt updateTime, 
+ JSON_OBJECT("authId",u.id,"username",u.username,"avatar",u.avatar_url) auth,
+	IF(COUNT(la.id),JSON_ARRAYAGG(JSON_OBJECT("id",la.id,"name",la.name))
+	
+	,NULL) labels,
+	(SELECT  IF(COUNT(c.id) ,JSON_ARRAYAGG(
+	JSON_OBJECT("id",c.id,"content",c.content,"commentId",c.comment_id,"createTime",c.createAt,"user",
+	JSON_OBJECT("id",u2.id,"name",u2.username,"avatar",u2.avatar_url)) 
+	
+ ),NULL) FROM comment c LEFT JOIN user u2 ON c.user_id = u2.id WHERE m.id = c.moment_id) comments
+ 
+FROM moment m
+ LEFT JOIN user u ON m.user_id = u.id 
+
+ LEFT JOIN moment_label ml ON ml.moment_id = m.id
+ LEFT JOIN label la ON la.id = ml.label_id
   `
 class MonmentService {
 
@@ -24,7 +38,7 @@ class MonmentService {
     try {
       if (id) {
 
-        state = `${userMomentFrag} WHERE moment.user_id = ? LIMIT ${pageStart},${length};`
+        state = `${userMomentFrag} WHERE m.user_id = ? GROUP BY m.id LIMIT ${pageStart},${length};`
         
         const res = await connection.execute(state, [id])
       
@@ -33,7 +47,7 @@ class MonmentService {
       else {
        
         state = ` ${userMomentFrag}
-          LIMIT ${pageStart},${length};
+        GROUP BY m.id LIMIT ${pageStart},${length};
          `
         const res = await connection.execute(state)
 
@@ -54,6 +68,29 @@ class MonmentService {
       return res[0]
     } catch (error) {
 
+    }
+  }
+  async hasLabel(momentId,labelId) {
+    const state = `
+    SELECT * FROM moment_label WHERE moment_id = ? AND label_id = ?;
+    `
+    try {
+       const [res] = await connection.execute(state,[momentId,labelId])
+    return res[0] ? true : false
+    } catch (error) {
+      
+    }
+   
+  }
+  async momentAddLabel(momentId,labelId) {
+    const state = `
+    INSERT INTO moment_label(moment_id,label_id) VALUES(?,?); 
+    `
+    try {
+        const [res] = await connection.execute(state,[momentId,labelId])
+        return res[0]
+    } catch (error) {
+      
     }
   }
 }

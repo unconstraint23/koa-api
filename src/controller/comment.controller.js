@@ -1,6 +1,16 @@
 
-const { createMoment,replyComment,updateComment,removeComment } = require("../service/comment.service")
+const { createMoment,replyComment,updateComment,removeComment,getList } = require("../service/comment.service")
 class CommentController {
+    async getListById(ctx,next) {
+        let {momentId} = ctx.params;
+        momentId = +momentId
+        try {
+            const res = await getList(momentId) 
+            ctx.body = res;
+        } catch (error) {
+            
+        }
+    }
     async create(ctx,next) {
         const req = ctx.request.body
         req.user = ctx.user

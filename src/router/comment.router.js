@@ -1,11 +1,13 @@
 const Router = require("koa-router");
-const { create,reply,updateComment,deleteComment } = require("../controller/comment.controller");
+const { create,reply,updateComment,deleteComment,getListById } = require("../controller/comment.controller");
 const { checkUserPermission } = require("../middleware/auth.middleware");
 const { checkToken } = require("../middleware/validator");
 
 
 const router = new Router({prefix: "/comment"});
 
+
+router.get("/list/:momentId",getListById)
 router.post("/create",checkToken,create)
 router.post("/:commentId/reply",checkToken,reply)
 
